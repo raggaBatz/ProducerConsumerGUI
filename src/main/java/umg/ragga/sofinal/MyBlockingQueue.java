@@ -12,47 +12,35 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * @author ragga
  */
-public class MyBlockingQueue<Integer> {
-    private Queue<Integer> queue;
-    private int max = 10;
-    private ReentrantLock lock = new ReentrantLock(true); 
-    
-    public MyBlockingQueue(int size){
-        queue = new LinkedList<>();
-        this.max = size;
+public class MyBlockingQueue {
+    private Queue<Integer> list;
+    private int size;
+    public MyBlockingQueue(int size) {
+        this.list = new LinkedList<>();
+        this.size = size;
     }
-    
-    public void put(Integer e){
-        lock.lock();
-        try{
-            if(queue.size() == max){
-                //Se bloquea cuando este lleno
+    public void put(int value) throws InterruptedException {
+        synchronized (this) {
+            while (list.size() >= size) {
+                wait();
             }
-            queue.add(e);
-        }catch(Exception ex){
-            System.out.println(ex.getMessage());
-        }finally{
-            lock.unlock();
+            list.add(value);
+            notify();
         }
     }
-    
-    public Integer take(){
-        lock.lock();
-        try{
-            if(queue.size() == 0){
-                //Se bloquea cuando este lleno
+    public int take() throws InterruptedException {
+        synchronized (this) {
+            while (list.isEmpty()) {
+                wait();
             }
-            Integer item = queue.remove();
-            return item;
-        }catch(Exception e){
-        }finally{
-            lock.unlock();
+            int value = list.poll();
+            notify();
+            return value;
         }
-        return take();
     }
     
     public int size(){
-        return queue.size();
+        return list.size();
     }
 }
 
