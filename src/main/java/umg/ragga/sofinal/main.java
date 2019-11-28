@@ -1,10 +1,7 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ *  git repo https://github.com/raggaBatz/ProducerConsumerGUI.git
  */
 package umg.ragga.sofinal;
-
 
 import java.util.List;
 import java.util.Random;
@@ -16,9 +13,10 @@ import javax.swing.SwingWorker;
 
 public class main extends javax.swing.JFrame {
     
-    BlockingQueue<Integer> queue = new ArrayBlockingQueue<>(10);
+    //BlockingQueue<Integer> queue = new ArrayBlockingQueue<>(10);
+    MyBlockingQueue<Integer> queue = new MyBlockingQueue<>(10);
     int valor=0;
-    int stack = 0;
+    //int stack = 0;
     
     public main() throws InterruptedException {
         initComponents();
@@ -298,10 +296,10 @@ public class main extends javax.swing.JFrame {
                 while(true){
                     try {
                         valor++;
-                        stack++;
+                        //stack++;
                         queue.put(valor);
-                        System.out.println("putting " + valor + " in stack " + stack);
-                        publish(stack);
+                        System.out.println("putting " + valor + " in stack " + queue.size());
+                        publish(queue.size());
                         int pro = (Integer)sProductor.getValue();
                         Thread.sleep(pro*1000);
                     } catch (InterruptedException ex) {
@@ -372,9 +370,9 @@ public class main extends javax.swing.JFrame {
                     while(true){
                         try {
                             Integer take = queue.take();
-                            stack--;
-                            System.out.println("taking out " + take + " in stack " + stack);
-                            publish(stack);
+                            //stack--;
+                            System.out.println("taking out " + take + " in stack " + queue.size());
+                            publish(queue.size());
                             int con = (Integer)sConsumidor.getValue();
                             Thread.sleep(con*1000);
                         } catch (InterruptedException ex) {
